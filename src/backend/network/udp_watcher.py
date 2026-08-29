@@ -1,5 +1,6 @@
 from backend.network.watcher import ConnectionWatcher
 from socket import timeout, error
+from threading import Event
 
 class UDPWatcher(ConnectionWatcher):
     def __init__(self, agents, on_disconnect):
@@ -21,6 +22,9 @@ class UDPWatcher(ConnectionWatcher):
     def _watch(self):
         self.set_timeout()
         while self.running:
+            if not self.agents():
+                Event().wait(0.002)
+                continue
             for agent in self.agents():
                 agent_socket = agent.bridge["socket"]
                 try:

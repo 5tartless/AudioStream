@@ -1,6 +1,7 @@
 from backend.agents.base import Agent
 from backend.audio.playback import AudioListener
 from backend import CURRENT_MENU, CURRENT_CONFIG
+from backend.audio.audio_sender.udp import UDPSender
 import socket
 
 class Client(Agent):
@@ -18,6 +19,7 @@ class Client(Agent):
             self.resock(reuseaddr=False)
             self.sock.settimeout(3.0)
             self.sock.connect((self.server_ip, CURRENT_CONFIG.CLIENT_PORT))
+            self.agent_manager.add_agent(UDPSender, self.server_ip, {"socket": self.sock})
             
             super().activate()
             self.audio_manager.listen(self.io_device)
