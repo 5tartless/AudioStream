@@ -20,6 +20,8 @@ class AudioListener(AudioManager):
         self.jitters = []
         self.stats_summary: str = None
 
+        self.elapsed = 0
+
     def _get_block_duration_ms(self) -> float:
         return (CURRENT_CONFIG.CLIENT_BLOCK_SIZE / CURRENT_CONFIG.CLIENT_SAMPLE_RATE) * 1000
     def _get_headroom_blocks(self) -> int:
@@ -96,14 +98,17 @@ class AudioListener(AudioManager):
                     audio_array = numpy.frombuffer(packet, dtype=numpy.float32).reshape(-1, self.CHANNELS)
                     if not audio_array.flags["C_CONTIGUOUS"]:
                         audio_array = numpy.ascontiguousarray(audio_array)
+
+                    start = time.perf_counter()
                     output.play(audio_array)
+                    self.elapsed = time.perf_counter - start
                 except queue.Empty:
                     self.buffer_underflows += 1
                     continue
 
     def _stats_thread(self):
         while self.running:
-            time.sleep(0.25)
+            time.sleep(0.5)
             #Calculate buffer latency:
             packet_duration = CURRENT_CONFIG.CLIENT_BLOCK_SIZE / CURRENT_CONFIG.CLIENT_SAMPLE_RATE
             current_queue_depth = self.queue.qsize()
@@ -114,6 +119,7 @@ class AudioListener(AudioManager):
             self.jitters.clear()
 
             self.stats_summary = f"""Latency: {buffer_latency_ms:.1f}ms | \
+elapsed: {self.elapsed} |\
 queue treshold: {self.QUEUE_THRESHOLD} | \
 Jitter: {avg_jitter_ms:.2f}ms | \
 Queue Size: {current_queue_depth:<2} | \
