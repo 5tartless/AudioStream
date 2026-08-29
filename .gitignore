@@ -1,0 +1,5 @@
+.venv/
+backend.zip
+client.py
+server.py
+src.zip

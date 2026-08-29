@@ -1,0 +1,17 @@
+[
+    {
+        "type": "udp",
+        "age": 53243,
+        "bridge": {
+            "socket": "socket()",
+            "ip": "192.168.100.2"
+        }
+    },
+    {
+        "type": "web_socket",
+        "age": 8547,
+        "bridge": {
+            "web_socket": "websocket()"
+        }
+    }
+]
