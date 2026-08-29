@@ -1,4 +1,4 @@
-from backend import CURRENT_CONFIG
+from backend import CURRENT_MENU, CURRENT_CONFIG
 from backend.audio.base import AudioManager
 from math import ceil
 import socket, numpy, queue, threading, time
@@ -34,7 +34,7 @@ class AudioListener(AudioManager):
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind(("0.0.0.0", CURRENT_CONFIG.CLIENT_LISTEN_PORT))
         self.running = True
-        self.queue = queue.Queue(maxsize=self._get_queue_max_size())
+        self.queue = queue.Queue(maxsize=self._get_queue_max_size()+3)
         
         network_thread = threading.Thread(target=self._network_thread, daemon=True)
         playback_thread = threading.Thread(target=self._playback_thread, kwargs={'playback_on': playback_on}, daemon=True)
@@ -103,7 +103,7 @@ class AudioListener(AudioManager):
 
     def _stats_thread(self):
         while self.running:
-            time.sleep(1.0)
+            time.sleep(0.25)
             #Calculate buffer latency:
             packet_duration = CURRENT_CONFIG.CLIENT_BLOCK_SIZE / CURRENT_CONFIG.CLIENT_SAMPLE_RATE
             current_queue_depth = self.queue.qsize()
@@ -118,3 +118,4 @@ Jitter: {avg_jitter_ms:.2f}ms | \
 Queue Size: {current_queue_depth:<2} | \
 Dropped Packets: {self.packets_dropped:<2} | \
 Stutters (Underflows): {self.buffer_underflows:<4}"""
+            CURRENT_MENU.refresh()

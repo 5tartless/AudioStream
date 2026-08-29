@@ -7,8 +7,8 @@ class Client(Agent):
     def __init__(self):
         super().__init__()
         self.audio_manager: AudioListener = AudioListener()
-        self.net_stats: dict = {} #unused
-        self.server_ip: str = "192.168.100.192"
+        # self.net_stats: dict = {} #unused
+        self.server_ip: str = "192.168.100.66" #hardcoded
 
     def gen_threads(self):
         return super().gen_threads(lambda agent: self.deactivate(from_server=True, agent=agent))
