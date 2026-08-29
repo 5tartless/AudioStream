@@ -17,7 +17,9 @@ class ConnectionWatcher():
         self.watcher_thread.start()
     def stop(self) -> None:
         self.running = False
-        self.watcher_thread.join()
+        self.watcher_thread: threading.Thread
+        if self.watcher_thread.is_alive():
+            self.watcher_thread.join()
         self.reset()
 
     def reset(self):
