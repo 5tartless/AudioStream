@@ -101,7 +101,7 @@ class AudioListener(AudioManager):
 
                     start = time.perf_counter()
                     output.play(audio_array)
-                    self.elapsed = time.perf_counter - start
+                    self.elapsed = time.perf_counter() - start
                 except queue.Empty:
                     self.buffer_underflows += 1
                     continue
@@ -119,7 +119,7 @@ class AudioListener(AudioManager):
             self.jitters.clear()
 
             self.stats_summary = f"""Latency: {buffer_latency_ms:.1f}ms | \
-elapsed: {self.elapsed} |\
+elapsed: {self.elapsed} | \
 queue treshold: {self.QUEUE_THRESHOLD} | \
 Jitter: {avg_jitter_ms:.2f}ms | \
 Queue Size: {current_queue_depth:<2} | \
