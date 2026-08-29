@@ -36,9 +36,9 @@ class Agent():
     def _activate_cw(self):
         for cw in self.connection_watchers:
             cw.start()
-    def _deactivate_cw(self):
+    def _deactivate_cw(self, no_join = False):
         for cw in self.connection_watchers:
-            cw.stop()
+            cw.stop(no_join)
 
     def gen_threads(self, on_udp_cw_disconnect: any):
         self.connection_watchers.clear()
@@ -66,7 +66,7 @@ class Agent():
         self.audio_manager.running = False
 
         self._cut_cw_connections()
-        self._deactivate_cw()
+        self._deactivate_cw(no_join = True)
 
         self.gen_threads()
         for sender in self.senders:
