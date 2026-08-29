@@ -6,7 +6,6 @@ import socket
 class Client(Agent):
     def __init__(self):
         super().__init__()
-        self.audio_manager: AudioListener = AudioListener()
         # self.net_stats: dict = {} #unused
         self.server_ip: str = "192.168.100.66" #hardcoded
 
@@ -14,6 +13,7 @@ class Client(Agent):
         return super().gen_threads(lambda agent: self.deactivate(from_server=True, agent=agent))
 
     def activate(self):
+        self.audio_manager: AudioListener = AudioListener()
         try:
             self.resock(reuseaddr=False)
             self.sock.settimeout(3.0)
