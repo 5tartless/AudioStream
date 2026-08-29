@@ -8,7 +8,7 @@ class UDPWatcher(ConnectionWatcher):
     
     def set_timeout(self) -> None:
         for agent in self.agents():
-            agent.bridge["socket"].settimeout(0.15)
+            agent.bridge["socket"].settimeout(2.5)
 
     def _disconnect(self, agent):
         self.on_disconnect(agent)
@@ -27,8 +27,8 @@ class UDPWatcher(ConnectionWatcher):
                     dummy_data = agent_socket.recv(1024)
                     if not dummy_data:
                         self._disconnect(agent)
-                    # else:
-                        # print(dummy_data)
+                    else:
+                        print(dummy_data)
                 except timeout:
                     pass
                 except error:

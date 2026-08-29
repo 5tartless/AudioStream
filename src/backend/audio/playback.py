@@ -74,7 +74,6 @@ class AudioListener(AudioManager):
                     self.queue.put_nowait(packet)
                 except queue.Full:
                     self.packets_dropped += 1
-                    print(self.packets_dropped)
                     try: 
                         self.queue.get_nowait()
                     except queue.Empty:
