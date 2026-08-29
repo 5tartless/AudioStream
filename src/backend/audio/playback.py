@@ -64,13 +64,13 @@ class AudioListener(AudioManager):
                 self.packets_received += 1
                     
                 # if desync then clear all the queue
-                # if self.queue.qsize() >= self.QUEUE_THRESHOLD:
-                #     while not self.queue.empty():
-                #         try:
-                #             self.queue.get_nowait()
-                #             self.packets_dropped += 1
-                #         except queue.Empty:
-                #             break
+                if self.queue.qsize() >= self.QUEUE_THRESHOLD:
+                    while not self.queue.empty():
+                        try:
+                            self.queue.get_nowait()
+                            self.packets_dropped += 1
+                        except queue.Empty:
+                            break
 
                 try:
                     self.queue.put_nowait(packet)
