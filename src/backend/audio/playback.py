@@ -119,7 +119,7 @@ class AudioListener(AudioManager):
             self.jitters.clear()
 
             self.stats_summary = f"""Latency: {buffer_latency_ms:.1f}ms | \
-elapsed: {self.elapsed} | \
+elapsed: {self.elapsed*1000:.3f} | \
 queue treshold: {self.QUEUE_THRESHOLD} | \
 Jitter: {avg_jitter_ms:.2f}ms | \
 Queue Size: {current_queue_depth:<2} | \
